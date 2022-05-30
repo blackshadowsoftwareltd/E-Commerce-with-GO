@@ -1,8 +1,10 @@
 package auth
 
 import (
+	data "ECommerceGo/data"
 	messages "ECommerceGo/messages"
 	models "ECommerceGo/models"
+	"time"
 
 	"encoding/json"
 	"fmt"
@@ -14,6 +16,8 @@ import (
 
 func SignUp(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Sign Up")
+	_time := time.Now()
+
 	//? Get the body of the request
 	var _user models.UserModel
 	_ = json.NewDecoder(r.Body).Decode(&_user)
@@ -39,5 +43,29 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	messages.SendMessage(w, r, "Success")
+	for _, _u := range data.UserList {
+		if _u.Email == _user.Email {
+			messages.ErrorMessage(w, r, "Email already exists")
+			return
+		}
+	}
+	if len(data.UserList) == 0 {
+		_user.Id = strconv.Itoa(0)
+		_user.CreatedAt = _time
+		_user.UpdatedAt = _time
+		data.UserList = append(data.UserList, _user)
+	} else {
+		_user.Id = strconv.Itoa(len(data.UserList))
+		_user.CreatedAt = _time
+		_user.UpdatedAt = _time
+		data.UserList = append(data.UserList, _user)
+	}
+
+	fmt.Println(_user)
+	_user.Password = ""
+
+	//? send response
+	messages.Ok(w)
+	json.NewEncoder(w).Encode(_user)
+
 }
