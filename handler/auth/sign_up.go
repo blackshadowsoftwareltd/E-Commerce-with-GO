@@ -2,6 +2,7 @@ package auth
 
 import (
 	data "ECommerceGo/data"
+	helper "ECommerceGo/helper"
 	messages "ECommerceGo/messages"
 	models "ECommerceGo/models"
 	"time"
@@ -60,12 +61,19 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		_user.UpdatedAt = _time
 		data.UserList = append(data.UserList, _user)
 	}
-
-	fmt.Println(_user)
+	_token, _tokenErr := helper.GenerateJWTToken(_user.Id)
+	if _tokenErr != nil {
+		fmt.Println("err ", _tokenErr)
+		messages.ErrorMessage(w, r, "Failed Generating Token")
+		return
+	}
+	_user.Id = ""
 	_user.Password = ""
+	_userModelResponse := models.UserModelResponse{Token: _token, User: _user}
 
 	//? send response
 	messages.Ok(w)
-	json.NewEncoder(w).Encode(_user)
+	json.NewEncoder(w).Encode(_userModelResponse)
+	fmt.Println("Sign Up Success")
 
 }

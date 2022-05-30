@@ -11,3 +11,7 @@ type UserModel struct {
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
+type UserModelResponse struct {
+	Token string    `json:"token"`
+	User  UserModel `json:"user"`
+}
