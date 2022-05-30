@@ -7,9 +7,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/mail"
 
 	"strconv"
-	"strings"
 )
 
 func SignUp(w http.ResponseWriter, r *http.Request) {
@@ -18,8 +18,9 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	var _user models.UserModel
 	_ = json.NewDecoder(r.Body).Decode(&_user)
 
-	//?
-	if _user.Email == "" || !strings.Contains(_user.Email, "@") || !strings.Contains(_user.Email, ".") {
+	//? signin input validation
+	_, _emailErr := mail.ParseAddress(_user.Email)
+	if _emailErr != nil {
 		messages.ErrorMessage(w, r, "Invalid Email")
 		return
 	} else if _user.Password == "" || len(_user.Password) < 6 {
