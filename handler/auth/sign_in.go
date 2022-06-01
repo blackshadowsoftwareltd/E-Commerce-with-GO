@@ -28,7 +28,7 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 	for _, _u := range data.UserList {
 		if _user.Email == _u.Email {
 			_emailFlag = true
-			if _user.Password == _u.Password {
+			if helper.CheckPasswordAndHash(_user.Password, _u.Password) {
 				_passwordFlag = true
 				_user = _u
 			}

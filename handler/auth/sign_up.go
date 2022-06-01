@@ -48,6 +48,10 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	//? password hashing
+	_user.Password, _ = helper.PasswordToHash(_user.Password)
+	fmt.Println("hash passowrd ", _user.Password)
+
 	if len(data.UserList) == 0 {
 		_user.Id = strconv.Itoa(0)
 		_user.CreatedAt = _time
