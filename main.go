@@ -1,7 +1,7 @@
 package main
 
 import (
-	handler "ECommerceGo/handler"
+	routes "ECommerceGo/handler/routes"
 	"fmt"
 )
 
@@ -9,5 +9,5 @@ func main() {
 	fmt.Println("Started")
 
 	//? start server
-	handler.HandleRoutes()
+	routes.HandleRoutes()
 }

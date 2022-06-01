@@ -1,8 +1,8 @@
-package handler
+package routes
 
 import (
-	auth "ECommerceGo/handler/auth"
 	methods "ECommerceGo/methods"
+	auth "ECommerceGo/methods/auth"
 	"log"
 	"net/http"
 
